@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculador de tiempo de vida para motivarte a aprovechar cada momento. Descubre cuántos segundos has vivido y cuánto te queda de vida.">
+    <meta name="keywords" content="calculador de vida, tiempo de vida, motivación, vida, segundos vividos, cálculo de vida, reflexionar sobre la vida, cálculo de tiempo de vida, edad en segundos, motivación diaria, reflexión de vida, vida saludable, optimización del tiempo, cuánto me queda de vida, contador de vida">
+    <meta name="author" content="Tu Nombre">
+    <meta property="og:title" content="Calculador de Tiempo de Vida ❤️">
+    <meta property="og:description" content="Calculador de tiempo de vida para motivarte a aprovechar cada momento. Descubre cuántos segundos has vivido y cuánto te queda de vida.">
+    <meta property="og:image" content="URL_de_tu_imagen_de_portada">
+    <meta property="og:url" content="URL_de_tu_sitio_web">
+    <title>Calculador de Tiempo de Vida ❤️</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        .life-bar-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+            height: 30px;
+            background-color: #eee;
+            border: 2px solid #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .life-bar {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .motivational-quote {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #333;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculador de Tiempo de Vida ❤️</h1>
+    <p>Ingresa tu fecha de nacimiento 📅:</p>
+    
+    <input type="date" id="birthdate">
+    <button onclick="calculateLife()">Calcular 🧮</button>
+    <div id="result"></div>
+    <div class="life-bar-container">
+        <div id="life-bar" class="life-bar">0%</div>
+    </div>
+    <div id="motivational" class="motivational-quote"></div>
+
+    <script>
+        const quotes = [
+    "La vida es un regalo, no un derecho. Aprovecha cada momento. 🎁",
+    "No esperes a que llegue el momento perfecto; haz que el momento sea perfecto. ✨",
+    "Cada día es una nueva oportunidad para cambiar tu vida. 🌅",
+    "El tiempo es limitado, así que no lo pierdas viviendo la vida de otra persona. ⏳",
+    "El futuro pertenece a aquellos que creen en la belleza de sus sueños. 🌟",
+    "La vida comienza al final de tu zona de confort. 🚀",
+    "Haz que cada día cuente, porque no hay dos días iguales. 📆",
+    "No se trata de cuánto tiempo tienes, sino de cómo lo utilizas. ⌛",
+    "El presente es el único tiempo que realmente tienes para hacer una diferencia. 🕰️",
+    "Recuerda siempre: lo mejor está por venir. 🌈",
+    "No esperes a ser feliz para empezar a vivir. Vive ahora y encuentra la felicidad en el presente. 🌻",
+    "La mayor gloria en vivir radica en levantarse cada vez que caemos. 🏆",
+    "El propósito de nuestras vidas es ser felices. 😊",
+    "La vida no se mide por los latidos del corazón, sino por los momentos que te dejan sin aliento. ❤️",
+    "La vida es realmente simple, pero insistimos en hacerla complicada. 🔍",
+    "El éxito no es la clave de la felicidad. La felicidad es la clave del éxito. Si amas lo que haces, serás exitoso. 🌟",
+    "Nunca es demasiado tarde para ser lo que podrías haber sido. 🌱",
+    "Tu tiempo es limitado, no lo desperdicies viviendo la vida de otra persona. ⏰",
+    "La vida es una serie de cambios naturales y espontáneos. No los resistas; eso solo crea dolor. Deja que la realidad sea la realidad. 🍃",
+    "Haz de tu vida un sueño, y de tu sueño una realidad. 🌟",
+    "La vida es la suma de tus elecciones. 🌍",
+    "Si puedes soñarlo, puedes hacerlo. 🌠",
+    "En la vida no se trata de encontrar a uno mismo, sino de crearse a uno mismo. 🎨",
+    "El único modo de hacer un gran trabajo es amar lo que haces. 💖",
+    "Los dos días más importantes de tu vida son el día en que naciste y el día en que descubres por qué. 🎉",
+    "Vive la vida que has imaginado. 🌟",
+    "La vida es como montar una bicicleta. Para mantener el equilibrio, debes seguir adelante. 🚲",
+    "No cuentes los días, haz que los días cuenten. 📅",
+    "La vida no se trata de encontrarse a uno mismo, sino de crearse a uno mismo. ✨",
+    "La vida es corta, y es nuestra responsabilidad hacerla dulce. 🍯",
+    "Tú eres el arquitecto de tu propio destino. 🏛️",
+    "Vive cada día como si fuera el último. 🌅",
+    "La vida es un espejo y te devuelve lo que le das. 🌟",
+    "El cambio es el proceso por el cual el futuro invade nuestras vidas. 🌐",
+    "No tengas miedo de renunciar a lo bueno para ir a por lo grandioso. 💪",
+    "El secreto de la felicidad es la libertad, y el secreto de la libertad es el coraje. 🦅",
+    "No permitas que las limitaciones de los demás limiten tu vida. 🚀",
+    "La vida es una aventura audaz o no es nada. 🌍",
+    "La vida es demasiado corta para esperar. ⏳",
+    "El éxito es la habilidad de ir de fracaso en fracaso sin perder el entusiasmo. 🌟",
+    "La vida es como un libro. Algunos capítulos son tristes, otros felices, y algunos emocionantes. Pero si nunca pasas la página, nunca sabrás lo que te depara el siguiente capítulo. 📖",
+    "Cree en ti mismo y todo será posible. 🌟",
+    "El cambio es inevitable. El crecimiento es opcional. 🌱",
+    "La vida no es esperar a que pase la tormenta, sino aprender a bailar bajo la lluvia. 🌧️",
+    "No busques el momento perfecto, toma el momento y hazlo perfecto. 🎯",
+    "El verdadero éxito es la paz interior que proviene de saber que has dado lo mejor de ti. 🌟",
+    "La vida es un desafío, enfréntalo. 🌈",
+    "La vida se mide en momentos, no en años. ⏱️",
+    "El viaje de mil millas comienza con un solo paso. 👣",
+    "Nunca dejes que el miedo te detenga de perseguir tus sueños. 🚀",
+    "Hazlo ahora. A veces 'más tarde' se convierte en 'nunca'. ⏳",
+    "Las oportunidades no son producto de la casualidad, sino resultado del trabajo. 💪",
+    "No puedes controlar todos los eventos que te ocurren, pero puedes decidir no ser reducido por ellos. 💫",
+    "La vida no se trata de esperar a que pase la tormenta, sino de aprender a bailar bajo la lluvia. 🌧️",
+    "Tu vida no mejora por casualidad, mejora por el cambio. 🌟",
+    "La vida es lo que hacemos de ella. Siempre lo ha sido, siempre lo será. 🌍",
+    "El mayor riesgo es no tomar ningún riesgo. En un mundo que cambia rápidamente, la única estrategia que garantiza fallar es no arriesgarse. ⚠️",
+    "La vida es como una cámara. Enfoca en lo importante, captura los buenos tiempos, desarrolla a partir de los negativos, y si las cosas no salen como esperabas, intenta una nueva toma. 📸",
+    "El éxito no es la clave de la felicidad. La felicidad es la clave del éxito. Si amas lo que haces, serás exitoso. 🌟",
+    "La vida es como una bicicleta: para mantener el equilibrio, debes seguir moviéndote. 🚴‍♂️",
+    "La vida se mide por las huellas que dejamos en el corazón de los demás. ❤️",
+    "El propósito de la vida es vivirla, saborearla, experimentarla al máximo, para llegar al final con un recuerdo de que valió la pena haber vivido. 🌟",
+    "La vida es un viaje que debe ser disfrutado, no una carrera que debe ser ganada. 🚀",
+    "El éxito es la suma de pequeños esfuerzos repetidos día tras día. 🌟",
+    "La vida es una oportunidad para cambiar el mundo. No la desperdicies. 🌍",
+    "El tiempo que disfrutas desperdiciar no es tiempo desperdiciado. ⏳",
+    "El propósito de la vida es encontrar tu regalo. El sentido de la vida es regalarlo. 🎁",
+    "Cada día es una nueva oportunidad para ser mejor que ayer. 🌞",
+    "La vida es un equilibrio entre mantener las cosas en orden y ser flexible. ⚖️",
+    "No dejes que tus miedos ocupen el lugar de tus sueños. 🌠",
+    "La vida no se trata de encontrar a uno mismo, sino de crearse a uno mismo. 🌟",
+    "Lo único que tenemos que temer es al miedo mismo. 💪",
+    "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora. 🌳",
+    "La vida es demasiado corta para estar en guerra contigo mismo. ✨",
+    "Nunca subestimes el poder de tu propia mente para cambiar tu vida. 🧠",
+    "La vida es una serie de momentos y decisiones. Haz que cada momento cuente. ⏳",
+    "La vida es el arte de dibujar sin una goma de borrar. 🎨",
+    "Cada día es una página en blanco de tu historia. Escribe algo grandioso. 📖",
+    "El mayor error que puedes cometer es el de tener miedo a cometer errores. ❌",
+    "La vida es un regalo, no un derecho. Aprovéchala al máximo. 🎁",
+    "La vida es un eco. Lo que envías regresa. Lo que siembras cosechas. 🌟",
+    "El único límite a nuestros logros de mañana está en nuestras dudas de hoy. 🚀",
+    "El verdadero valor de un hombre se mide por lo que hace cuando sabe que nadie lo está mirando. 👀",
+    "La vida es una aventura y no una garantía. Vive cada día con pasión. 🌟",
+    "El éxito es aprender a ir de fracaso en fracaso sin perder el entusiasmo. 🌟",
+    "La vida es la suma de tus decisiones y actitudes. 💪",
+    "Nunca subestimes el impacto de un pequeño acto de bondad. 🌈",
+    "La vida es un reflejo de nuestras actitudes. 🌟",
+    "Vive cada día como si fuera el último. 🌅",
+    "El éxito es la habilidad de ir de fracaso en fracaso sin perder el entusiasmo. 🌟",
+    "La vida es una oportunidad, aprovecha cada momento. 🎁",
+    "El tiempo es el recurso más valioso. No lo malgastes. ⏳",
+    "Cada día es una nueva oportunidad para mejorar. 🌞",
+    "No esperes para hacer lo que amas. Empieza hoy. 🌟",
+    "La vida es una serie de momentos. Haz que cada uno cuente. ⏱️",
+    "No importa cuántos errores cometas, siempre hay una oportunidad para mejorar. 🌟",
+    "La vida es el resultado de nuestras decisiones. Hazlas sabias. 🌟",
+    "Cada día es una nueva oportunidad para escribir tu propia historia. 📖",
+    "La vida es un regalo. Disfruta cada momento. 🎁",
+    "El mayor logro es vivir una vida plena. 🌟",
+    "La vida es un viaje, no un destino. 🌍",
+    "No dejes que el miedo te detenga. Sigue adelante. 🚀",
+    "La vida es una aventura. Aprovecha cada oportunidad. 🌟",
+    "El éxito es el resultado de prepararse, trabajar duro y aprender de los fracasos. 💪",
+    "Cada día es una nueva oportunidad para ser mejor. 🌞",
+    "La vida es un proceso constante de crecimiento y cambio. 🌱",
+    "El propósito de la vida es encontrar tu pasión y seguirla. 🌟",
+    "Cada momento es una oportunidad para hacer una diferencia. 🌈",
+    "La vida es demasiado corta para vivirla sin propósito. 🌟",
+    "No te rindas. Grandes cosas llevan tiempo. ⏳",
+    "La vida es un viaje personal. Disfruta del camino. 🌍",
+    "El verdadero éxito radica en ser feliz con lo que haces. 😊",
+    "Cada día es una oportunidad para hacer algo grandioso. 🌟",
+    "No importa lo lento que avances, siempre estarás adelante de aquellos que no lo intentan. 🌟",
+    "La vida es una oportunidad para aprender y crecer. 🌱",
+    "Haz de cada día una obra maestra. 🎨",
+    "La vida es un viaje. Disfruta cada etapa. 🌟",
+    "El mayor riesgo es no tomar ningún riesgo. 🌟",
+    "No dejes que tus miedos te detengan. Sigue adelante. 💪",
+    "La vida es un regalo. Aprovéchalo. 🎁",
+    "Cada día es una nueva oportunidad para ser feliz. 🌞",
+    "La vida es un viaje. Disfruta cada momento. 🌍",
+    "La vida es una serie de decisiones. Hazlas con valentía. 💪",
+    "La vida es una oportunidad. Aprovecha cada momento. 🌟",
+    "El éxito es el resultado de perseverar a través de las dificultades. 🌟",
+    "No dejes que el miedo te frene. Sigue adelante. 🚀",
+    "La vida es una serie de momentos. Haz que cada uno cuente. 🌟",
+    "La vida es una aventura. Aprovéchala al máximo. 🌟",
+    "Cada día es una nueva oportunidad para empezar de nuevo. 🌅",
+    "La vida es un viaje. Disfruta el camino. 🌍",
+    "El verdadero éxito es encontrar la felicidad en lo que haces. 😊",
+    "Cada día es una nueva oportunidad para ser tu mejor versión. 🌟"
+];
+
+
+        function calculateLife() {
+            const birthdateInput = document.getElementById('birthdate').value;
+            if (!birthdateInput) {
+                alert('Por favor, ingresa tu fecha de nacimiento.');
+                return;
+            }
+
+            const birthdate = new Date(birthdateInput);
+            const now = new Date();
+            const lifeExpectancy = 73 * 365 * 24 * 60 * 60 * 1000; // 73 años en milisegundos
+            const secondsInADay = 24 * 60 * 60;
+            
+            const ageMilliseconds = now - birthdate;
+            const ageSeconds = ageMilliseconds / 1000;
+            const lifeSeconds = lifeExpectancy / 1000;
+            const secondsLeft = lifeSeconds - ageSeconds;
+            const percentageLived = (ageSeconds / lifeSeconds) * 100;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                Has vivido aproximadamente ${Math.floor(ageSeconds)} segundos. ⏱️<br>
+                Te quedan aproximadamente ${Math.floor(secondsLeft)} segundos de vida. ⌛<br>
+                Has vivido aproximadamente ${percentageLived.toFixed(2)}% de una vida promedio de 73 años. 📊
+            `;
+
+            const lifeBar = document.getElementById('life-bar');
+            lifeBar.style.width = `${percentageLived.toFixed(2)}%`;
+            lifeBar.textContent = `${percentageLived.toFixed(2)}%`;
+
+            // Selecciona una frase motivadora aleatoria
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            const motivationalDiv = document.getElementById('motivational');
+            motivationalDiv.textContent = randomQuote;
+        }
+    </script>
+</body>
+</html>
